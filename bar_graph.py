@@ -1,38 +1,24 @@
-# Task-01: Bar Chart and Histogram Visualization
-# Prodigy InfoTech Data Science Internship
-# GitHub: https://github.com/Prodigy-InfoTech/data-science-datasets/tree/main/Task%201
-
-# Import libraries
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 
-# Load dataset
-url = 'https://raw.githubusercontent.com/Prodigy-InfoTech/data-science-datasets/main/Task%201/dataset.csv'
-df = pd.read_csv(url)
+# Load dataset and skip the first 4 metadata rows
+df = pd.read_csv("API_SP.POP.TOTL_DS2_en_csv_v2_38144.csv", skiprows=4)
 
-# Print first few rows
-print("Sample data preview:")
+# Display the first few rows to understand the structure (optional)
 print(df.head())
 
-# Histogram for Age distribution
-plt.figure(figsize=(8, 5))
-sns.histplot(df['Age'], bins=10, kde=True, color='steelblue')
-plt.title('Age Distribution')
-plt.xlabel('Age')
-plt.ylabel('Frequency')
-plt.grid(True)
-plt.tight_layout()
-plt.savefig('age_distribution.png')  # Save as image
-plt.show()
+# Extract relevant columns: Country Name and 2022 data
+df_2022 = df[['Country Name', '2022']].dropna()
 
-# Bar chart for Gender distribution
-plt.figure(figsize=(6, 4))
-sns.countplot(data=df, x='Gender', palette='Set2')
-plt.title('Gender Distribution')
-plt.xlabel('Gender')
-plt.ylabel('Count')
-plt.grid(True, axis='y')
+# Get the top 7 countries by population in 2022
+top7 = df_2022.sort_values(by='2022', ascending=False).head(7)
+
+# Plotting the bar graph
+plt.figure(figsize=(10, 6))
+plt.bar(top7['Country Name'], top7['2022'], color='teal')
+plt.xlabel("Country")
+plt.ylabel("Population in 2022")
+plt.title("Top 7 Most Populous Countries (2022)")
+plt.xticks(rotation=45)
 plt.tight_layout()
-plt.savefig('gender_distribution.png')  # Save as image
 plt.show()
